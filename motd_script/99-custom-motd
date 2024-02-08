@@ -6,9 +6,9 @@ SERVER_NAME=Achernar
 # Funzione per controllare lo stato di Jellyfin
 check_jellyfin_status() {
     if systemctl is-active --quiet jellyfin; then
-        echo -e "- Jellyfin: \e[32mOnline\e[0m"  # Verde per i servizi online
+        echo -e "- Jellyfin: \e[32mOnline\e[0m"
     else
-        echo -e "- Jellyfin: \e[31mOffline\e[0m"  # Rosso per i servizi offline
+        echo -e "- Jellyfin: \e[31mOffline\e[0m"
     fi
 }
 
