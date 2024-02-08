@@ -1,0 +1,75 @@
+#!/bin/bash
+
+# Nome del server
+SERVER_NAME=Achernar
+
+# Funzione per controllare lo stato di Jellyfin
+check_jellyfin_status() {
+    if systemctl is-active --quiet jellyfin; then
+        echo -e "- Jellyfin: \e[32mOnline\e[0m"  # Verde per i servizi online
+    else
+        echo -e "- Jellyfin: \e[31mOffline\e[0m"  # Rosso per i servizi offline
+    fi
+}
+
+# Funzione per controllare lo stato dei servizi
+check_service_status() {
+    echo "SERVIZI:"
+    # Controlla lo stato di MariaDB
+    if systemctl is-active --quiet mariadb; then
+        echo -e "- MariaDB: \e[32mOnline\e[0m"
+    else
+        echo -e "- MariaDB: \e[31mOffline\e[0m"
+    fi
+
+    # Controlla lo stato di PostgreSQL
+    if systemctl is-active --quiet postgresql; then
+        echo -e "- PostgreSQL: \e[32mOnline\e[0m"
+    else
+        echo -e "- PostgreSQL: \e[31mOffline\e[0m"
+    fi
+
+    # Controlla lo stato di Redis
+    if systemctl is-active --quiet redis-server; then
+        echo -e "- Redis: \e[32mOnline\e[0m"
+    else
+        echo -e "- Redis: \e[31mOffline\e[0m"
+    fi
+
+    # Controlla lo stato di Nginx
+    if systemctl is-active --quiet nginx; then
+        echo -e "- Nginx: \e[32mOnline\e[0m"
+    else
+        echo -e "- Nginx: \e[31mOffline\e[0m"
+    fi
+
+    # Controlla lo stato di Jellyfin
+    check_jellyfin_status
+}
+
+# Funzione per visualizzare lo spazio disco disponibile
+display_disk_space() {
+    echo "Spazio disco disponibile:"
+    df -h | awk '$NF=="/"{printf "- %s disponibili su %s (%s utilizzati)\n", $4, $2, $5}'
+}
+
+# Funzione per verificare la disponibilità del server gw.hersel.it
+check_gateway_server() {
+    echo "Stato di gw.hersel.it:"
+    ping -c 1 gw.hersel.it > /dev/null
+    if [ $? -eq 0 ]; then
+        echo -e "- il server gw.hersel.it è: \e[32mOnline\e[0m"
+    else
+		echo -e "- il server gw.hersel.it è: \e[31mOffline\e[0m"
+    fi
+}
+
+# Main
+echo "Benvenuto sul server $SERVER_NAME"
+echo ""
+check_service_status
+echo ""
+display_disk_space
+echo ""
+check_gateway_server
+
