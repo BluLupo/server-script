@@ -1,7 +1,9 @@
 #!/bin/bash
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ 
 # Import the configuration file
-source config.sh
+source "$SCRIPT_DIR/config.sh"
 
 # Cycle through all the databases and back up each one
 for db_name in "${databases[@]}"; do
