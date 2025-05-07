@@ -1,4 +1,4 @@
-# db_bash_backup
+# MYSQL/MARIADB backup
 Script to backup multiple databases
 
 
