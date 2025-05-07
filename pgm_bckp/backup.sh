@@ -3,6 +3,18 @@
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/config.sh"
 
+# Check if required commands are available
+missing=0
+
+command -v mysqldump >/dev/null 2>&1 || { echo "❌ mysqldump not found. Install it with: sudo apt install mariadb-client or sudo apt install mysql-client"; missing=1; }
+command -v pg_dump >/dev/null 2>&1 || { echo "❌ pg_dump not found. Install it with: sudo apt install postgresql-client"; missing=1; }
+
+if [ "$missing" -eq 1 ]; then
+    echo "❌ Aborting: Required tools are missing."
+    exit 1
+fi
+
+
 mkdir -p "$backup_dir"
 
 for db_id in "${database_ids[@]}"; do
